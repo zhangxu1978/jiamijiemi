@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON加密解密工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>JSON加密解密工具</h1>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'encrypt')">加密</button>
+            <button class="tab-button" onclick="openTab(event, 'decrypt')">解密</button>
+        </div>
+        
+        <div id="encrypt" class="tab-content active">
+            <div class="form-group">
+                <label for="encrypt-key">加密密钥:</label>
+                <input type="password" id="encrypt-key" placeholder="请输入加密密钥">
+            </div>
+            
+            <div class="form-group">
+                <label for="encrypt-file">上传JSON文件:</label>
+                <input type="file" id="encrypt-file" accept=".json">
+            </div>
+            
+            <div class="form-group">
+                <textarea id="encrypt-json-preview" placeholder="JSON内容预览..." rows="10" readonly></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button id="encrypt-btn" class="btn-primary">加密文件</button>
+                <button id="export-encrypted-btn" class="btn-secondary" disabled>导出加密文件</button>
+            </div>
+        </div>
+        
+        <div id="decrypt" class="tab-content">
+            <div class="form-group">
+                <label for="decrypt-key">解密密钥:</label>
+                <input type="password" id="decrypt-key" placeholder="请输入解密密钥">
+            </div>
+            
+            <div class="form-group">
+                <label for="decrypt-file">上传加密文件:</label>
+                <input type="file" id="decrypt-file" accept=".txt,.enc">
+            </div>
+            
+            <div class="form-group">
+                <textarea id="decrypt-json-preview" placeholder="解密后的JSON内容预览..." rows="10" readonly></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button id="decrypt-btn" class="btn-primary">解密文件</button>
+                <button id="export-decrypted-btn" class="btn-secondary" disabled>导出解密文件</button>
+            </div>
+        </div>
+        
+        <div class="status-message" id="status-message"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "测试数据",
+  "version": "1.0.0",
+  "description": "这是一个用于测试加密解密功能的示例JSON文件",
+  "data": [
+    {
+      "id": 1,
+      "name": "项目1",
+      "value": 100
+    },
+    {
+      "id": 2,
+      "name": "项目2",
+      "value": 200
+    },
+    {
+      "id": 3,
+      "name": "项目3",
+      "value": 300
+    }
+  ],
+  "settings": {
+    "debug": true,
+    "mode": "production",
+    "theme": "dark"
+  },
+  "timestamp": "2023-10-01T12:00:00Z"
+}
