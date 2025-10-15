@@ -79,7 +79,19 @@
             </div>
             
             <div class="form-group">
-                <textarea id="media-files-list" placeholder="已选择的文件列表..." rows="5" readonly></textarea>
+                <div id="media-files-list" class="file-list">
+                    <!-- 文件列表将在这里动态生成 -->
+                    <p class="empty-message">尚未选择文件</p>
+                </div>
+            </div>
+            
+            <!-- 预览窗口 -->
+            <div id="preview-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3 id="preview-title">文件预览</h3>
+                    <div id="preview-container"></div>
+                </div>
             </div>
             
             <div class="button-group">
