@@ -13,6 +13,7 @@
         <div class="tabs">
             <button class="tab-button active" onclick="openTab(event, 'encrypt')">加密</button>
             <button class="tab-button" onclick="openTab(event, 'decrypt')">解密</button>
+            <button class="tab-button" onclick="openTab(event, 'media-decrypt')">图片音频还原</button>
         </div>
         
         <div id="encrypt" class="tab-content active">
@@ -27,7 +28,7 @@
             </div>
             
             <div class="form-group">
-                <textarea id="encrypt-json-preview" placeholder="JSON内容预览..." rows="10" readonly></textarea>
+                <textarea id="encrypt-json-preview" placeholder="JSON内容预览..." rows="10"></textarea>
             </div>
             
             <div class="button-group">
@@ -48,7 +49,7 @@
             </div>
             
             <div class="form-group">
-                <textarea id="decrypt-json-preview" placeholder="解密后的JSON内容预览..." rows="10" readonly></textarea>
+                <textarea id="decrypt-json-preview" placeholder="解密后的JSON内容预览..." rows="10"></textarea>
             </div>
             
             <div class="button-group">
@@ -57,10 +58,53 @@
             </div>
         </div>
         
+        <div id="media-decrypt" class="tab-content">
+            <div class="form-group">
+                <label for="media-key">解密密钥:</label>
+                <input type="password" id="media-key" placeholder="请输入32位十六进制密钥或16位字符串密钥">
+                <label style="margin-left: 10px;">
+                    <input type="checkbox" id="use-no-key-method">
+                    尝试无需密钥还原
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="media-file">选择文件:</label>
+                <input type="file" id="media-file" multiple>
+            </div>
+            
+            <div class="form-group">
+                <label for="media-folder-info">注意:</label>
+                <p id="media-folder-info">由于浏览器安全限制，无法直接选择目录。请选择多个文件进行批量还原，或使用底部命令行工具处理整个目录。</p>
+            </div>
+            
+            <div class="form-group">
+                <textarea id="media-files-list" placeholder="已选择的文件列表..." rows="5" readonly></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button id="media-decrypt-btn" class="btn-primary">还原文件</button>
+                <button id="media-export-btn" class="btn-secondary" disabled>下载ZIP文件</button>
+            </div>
+        </div>
+        
         <div class="status-message" id="status-message"></div>
+    </div>
+    
+    <div class="container command-line-info">
+        <h3>命令行工具使用说明</h3>
+        <p>如需处理整个目录，请使用命令行工具。在项目根目录执行以下命令：</p>
+        <pre>node public/pojie.js &lt;文件或目录路径&gt; [--key &lt;十六进制或16字符密钥&gt;]</pre>
+        <p>例如：</p>
+        <pre>node public/pojie.js www/img --key e10adc3949ba59abbe56e057f20f883e</pre>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="Decrypter.js"></script>
+    <script src="ZIP.js"></script>
     <script src="app.js"></script>
+    <script src="pojie.js"></script>
 </body>
 </html>

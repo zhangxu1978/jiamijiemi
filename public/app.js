@@ -81,6 +81,7 @@ encryptFileInput.addEventListener("change", async (event) => {
 // 加密按钮点击事件
 encryptBtn.addEventListener("click", async () => {
     const key = encryptKeyInput.value;
+    const jsonPreviewContent = encryptJsonPreview.value;
     const file = encryptFileInput.files[0];
 
     if (!key) {
@@ -88,22 +89,22 @@ encryptBtn.addEventListener("click", async () => {
         return;
     }
 
-    if (!file) {
-        showStatus("请选择要加密的JSON文件", true);
+    if (!jsonPreviewContent.trim()) {
+        showStatus("请先上传JSON文件或在预览区输入JSON内容", true);
         return;
     }
 
     try {
         showStatus("正在加密中...");
-        const content = await readFile(file);
-        const jsonData = JSON.parse(content);
+        // 直接使用预览区编辑后的内容
+        const jsonData = JSON.parse(jsonPreviewContent);
 
         // 使用CryptoJS进行加密
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(jsonData), key).toString();
 
         // 存储加密结果和文件名
         encryptedResult = encrypted;
-        encryptedFileName = file.name.replace('.json', '');
+        encryptedFileName = file ? file.name.replace('.json', '') : 'encrypted_data';
         
         // 启用导出按钮
         exportEncryptedBtn.disabled = false;
@@ -176,7 +177,7 @@ decryptBtn.addEventListener("click", async () => {
         // 启用导出按钮
         exportDecryptedBtn.disabled = false;
         
-        showStatus("文件解密成功，请点击导出按钮下载");
+        showStatus("文件解密成功，您可以编辑预览区内容后再导出");
     } catch (error) {
         showStatus(`解密失败: ${error.message}`, true);
     }
@@ -184,19 +185,41 @@ decryptBtn.addEventListener("click", async () => {
 
 // 加密文件导出按钮点击事件
 exportEncryptedBtn.addEventListener("click", () => {
-    if (encryptedResult && encryptedFileName) {
-        downloadFile(encryptedResult, `${encryptedFileName}_encrypted.txt`, 'text/plain');
+    const key = encryptKeyInput.value;
+    const jsonPreviewContent = encryptJsonPreview.value;
+
+    if (!key) {
+        showStatus("请输入加密密钥", true);
+        return;
+    }
+
+    if (!jsonPreviewContent.trim()) {
+        showStatus("预览区没有内容可加密导出", true);
+        return;
+    }
+
+    try {
+        // 直接使用预览区编辑后的内容进行加密导出
+        const jsonData = JSON.parse(jsonPreviewContent);
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(jsonData), key).toString();
+        downloadFile(encrypted, `${encryptedFileName || 'encrypted_data'}_encrypted.txt`, 'text/plain');
         showStatus("加密文件导出成功");
-    } else {
-        showStatus("没有可导出的加密文件", true);
+    } catch (error) {
+        showStatus(`导出失败: ${error.message}`, true);
     }
 });
 
 // 解密文件导出按钮点击事件
 exportDecryptedBtn.addEventListener("click", () => {
-    if (decryptedResult && decryptedFileName) {
-        downloadFile(decryptedResult, `${decryptedFileName}_decrypted.json`, 'application/json');
-        showStatus("解密文件导出成功");
+    if (decryptJsonPreview.value.trim()) {
+        try {
+            // 验证预览区内容是否为有效的JSON
+            JSON.parse(decryptJsonPreview.value);
+            downloadFile(decryptJsonPreview.value, `${decryptedFileName || 'decrypted_data'}_decrypted.json`, 'application/json');
+            showStatus("解密文件导出成功");
+        } catch (error) {
+            showStatus(`导出失败: 预览区内容不是有效的JSON`, true);
+        }
     } else {
         showStatus("没有可导出的解密文件", true);
     }
